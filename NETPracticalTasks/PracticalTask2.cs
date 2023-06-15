@@ -1,30 +1,48 @@
 using System.Runtime.Loader;
 
-namespace ConsoleApp1
+namespace MetadataExtraction
 {
-  internal class PracticalTask2
+  /// <summary>
+  /// Извлечение метаданных объекта типа "System.Collections.Hashtable" (список интрфейсов и аттрибутов)
+  /// </summary>
+  internal class HashtableTypeMetadataExtractor
   {
     #region  Константы
 
+    /// <summary>
+    /// Путь к файлу сборки.
+    /// </summary>
     private const string AssemblyPath = "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\6.0.15\\mscorlib.dll";
+
+    /// <summary>
+    /// Название объекта типа.
+    /// </summary>
     private const string TypeName = "System.Collections.Hashtable";
-    private const string OutputFilePath = "test2.txt";
 
     #endregion
 
     #region Методы
 
-    public void Process()
+    /// <summary>
+    /// Извлечение имен интерфейсов и аттрибутов из класса System.Collections.Hashtable в файл.
+    /// </summary>
+    /// <param name="outputFilePath"></param>
+    internal static void Process(string outputFilePath)
     {
-      Type? type = LoadType();
+      var type = LoadType();
       if (type == null)
         return;
 
-      using var stream = new StreamWriter(OutputFilePath);
+      using var stream = new StreamWriter(outputFilePath);
       PrintInterfaces(type, stream);
       PrintAttributes(type, stream);
     }
 
+    /// <summary>
+    /// Записать имена аттрибутов объекта типа в поток записи.
+    /// </summary>
+    /// <param name="type">Объект типа.</param>
+    /// <param name="stream">Поток записи.</param>
     private static void PrintAttributes(Type type, StreamWriter stream)
     {
       foreach (var attribute in type.CustomAttributes)
@@ -33,6 +51,11 @@ namespace ConsoleApp1
       }
     }
 
+    /// <summary>
+    /// Записать имена интерфейсов объекта типа в поток записи.
+    /// </summary>
+    /// <param name="type">Объект типа.</param>
+    /// <param name="stream">Поток записи.</param>
     private static void PrintInterfaces(Type type, StreamWriter stream)
     {
       foreach (var interfaceType in type.GetInterfaces())
@@ -41,6 +64,10 @@ namespace ConsoleApp1
       }
     }
 
+    /// <summary>
+    /// Загрузить объект типа из файла сборки.
+    /// </summary>
+    /// <returns>Объект типа.</returns>
     private static Type? LoadType()
     {
       var context = new AssemblyLoadContext(name: "Test", isCollectible: true);
