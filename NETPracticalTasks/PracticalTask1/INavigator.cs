@@ -1,24 +1,28 @@
-using ConsoleApp1.PracticalTask1.Common;
+using Navigation.Common;
 
-namespace ConsoleApp1.PracticalTask1
+namespace Navigation
 {
   /// <summary>
   /// Контракт для навигатора.
   /// </summary>
   public interface INavigator
   {
+    /// <summary>
+    /// Установить режим отображения.
+    /// </summary>
+    /// <param name="mode">Режим отображения.</param>
     void SetVisualizationMode(VisualizationMode mode);
 
     /// <summary>
     /// Начать марштрут к указаной точки.
     /// </summary>
     /// <param name="coordinate">Пункт назначения.</param>
-    void StartRoute(Coordinate coordinate);
+    bool StartRoute(Coordinate coordinate);
 
     /// <summary>
     /// Начать марштрут к указаной точки.
     /// </summary>
     /// <param name="endPoint">Название пункта назначения.</param>
-    void StartRoute(string endPoint);
+    bool StartRoute(string endPoint);
   }
 }

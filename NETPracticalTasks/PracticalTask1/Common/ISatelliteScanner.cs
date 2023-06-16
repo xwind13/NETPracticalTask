@@ -1,10 +1,14 @@
-namespace ConsoleApp1.PracticalTask1.Common
+namespace Navigation.Common
 {
   /// <summary>
   /// Контракт сканнера для получения актульного состава видимых спутников.
   /// </summary>
   public interface ISatelliteScanner
   {
-    List<ISatellite> ObtainVisibleSatellites();
+    /// <summary>
+    /// Получение актульного состава видимых спутников.
+    /// </summary>
+    /// <returns>Список спутников.</returns>
+    IReadOnlyList<ISatellite> ObtainVisibleSatellites();
   }
 }

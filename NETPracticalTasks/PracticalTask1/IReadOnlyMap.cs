@@ -1,6 +1,6 @@
-using ConsoleApp1.PracticalTask1.Common;
+using Navigation.Common;
 
-namespace ConsoleApp1.PracticalTask1
+namespace Navigation
 {
   /// <summary>
   /// контракт для карты со свойствами доступных только по чтению.
@@ -8,9 +8,9 @@ namespace ConsoleApp1.PracticalTask1
   public interface IReadOnlyMap
   {
     /// <summary>
-    /// Список названий мест, для которых есть сохранненые координаты.
+    /// Словарь названий мест с сохраненными для них координатами.
     /// </summary>
-    IReadOnlyCollection<string> NamedPlaces { get; }
+    IReadOnlyDictionary<string, Coordinate> NamedPlaces { get; }
 
     /// <summary>
     /// Расчитанный маршрут.

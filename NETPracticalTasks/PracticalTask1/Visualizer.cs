@@ -1,6 +1,6 @@
-using ConsoleApp1.PracticalTask1.Common;
+using Navigation.Common;
 
-namespace ConsoleApp1.PracticalTask1
+namespace Navigation
 {
   /// <summary>
   /// Визуализатор для отображения маршрута на карте.
@@ -10,27 +10,38 @@ namespace ConsoleApp1.PracticalTask1
     private readonly Dictionary<VisualizationMode, IVisualizerState> states;
     private IVisualizerState? currentState;
 
+    /// <summary>
+    /// Флаг что режим отображения был выставлен.
+    /// </summary>
+    public bool VisualizationModeSet { get; private set; }
+
+    /// <summary>
+    /// Установить режим отображения.
+    /// </summary>
+    /// <param name="mode">Режим отображения.</param>
     public void SetMode(VisualizationMode mode)
     {
-      if (this.states.ContainsKey(mode))
-      {
-        this.currentState = this.states[mode];
-      }
-      else
-      {
+      if (!this.states.TryGetValue(mode, out var state))
         throw new ArgumentException($"Invalid visualization mode: {mode}");
-      }
+
+      this.currentState = state;
+      this.VisualizationModeSet = true;
     }
 
+    /// <summary>
+    /// Отобразить маршрут.
+    /// </summary>
+    /// <param name="route">Список координат маршрута.</param>
     public void VisualizeRoute(IReadOnlyList<Coordinate> route)
     {
-      this.currentState?.VisualizeRoute(route);
+      this.currentState?.SetRoute(route);
+      this.currentState?.Invalidate();
     }
 
     public Visualizer(IVisualizerStates states)
     {
       this.states = states.States;
-      this.SetMode(VisualizationMode.Mode2D);
+      
     }
   }
 }

@@ -1,6 +1,6 @@
-using ConsoleApp1.PracticalTask1.Common;
+using Navigation.Common;
 
-namespace ConsoleApp1.PracticalTask1
+namespace Navigation
 {
   /// <summary>
   /// Карта.
@@ -11,18 +11,24 @@ namespace ConsoleApp1.PracticalTask1
 
     private readonly IRouteCalculator routeCalculator;
     private readonly IMapDataService dataService;
+    private readonly Dictionary<string, Coordinate> namedPlaces;
 
-    private Dictionary<string, Coordinate> namedPlaces;
-
+    /// <summary>
+    /// Расчитанный маршрут.
+    /// </summary>
     public IReadOnlyList<Coordinate> Route { get; private set; }
-    public IReadOnlyCollection<string> NamedPlaces
+
+    /// <summary>
+    /// Словарь названий мест с сохраненными для них координатами.
+    /// </summary>
+    public IReadOnlyDictionary<string, Coordinate> NamedPlaces
     {
       get
       {
         if (this.namedPlaces != null)
-          return this.namedPlaces.Keys;
+          return this.namedPlaces;
 
-        return new List<string>();
+        return new Dictionary<string, Coordinate>();
       }
     }
 
@@ -30,6 +36,12 @@ namespace ConsoleApp1.PracticalTask1
 
     #region Методы
 
+    /// <summary>
+    /// Построить маршрут.
+    /// </summary>
+    /// <param name="current">Текущая позиция.</param>
+    /// <param name="end">Конечная позиция.</param>
+    /// <returns>Флаг был ли расчет успешный.</returns>
     public bool BuildRoute(Coordinate current, Coordinate end)
     {
       this.Route = this.routeCalculator.Calculate(current, end);
@@ -38,6 +50,12 @@ namespace ConsoleApp1.PracticalTask1
       return isSuccess;
     }
 
+    /// <summary>
+    /// Построить маршрут.
+    /// </summary>
+    /// <param name="current">Текущая позиция.</param>
+    /// <param name="end">Название места конечной позиции.</param>
+    /// <returns>Флаг был ли расчет успешный.</returns>
     public bool BuildRoute(Coordinate current, string endPlace)
     {
       if (!this.namedPlaces.ContainsKey(endPlace))
@@ -46,6 +64,11 @@ namespace ConsoleApp1.PracticalTask1
       return this.BuildRoute(current, this.namedPlaces[endPlace]);
     }
 
+    /// <summary>
+    /// Обновить маршрут.
+    /// </summary>
+    /// <param name="current">Текущая позиция.</param>
+    /// <returns>Флаг был ли расчет успешный.</returns>
     public bool UpdateRoute(Coordinate current)
     {
       if (this.Route.Any())

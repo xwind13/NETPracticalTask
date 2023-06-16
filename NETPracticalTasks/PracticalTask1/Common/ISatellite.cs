@@ -1,4 +1,4 @@
-namespace ConsoleApp1.PracticalTask1.Common
+namespace Navigation.Common
 {
   /// <summary>
   /// Контракт для объекта спутника.

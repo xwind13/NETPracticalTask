@@ -1,6 +1,6 @@
-using ConsoleApp1.PracticalTask1.Common;
+using Navigation.Common;
 
-namespace ConsoleApp1.PracticalTask1
+namespace Navigation
 {
   /// <summary>
   /// Расширение конракта для карты с возможностью просчитывать маршрут.

@@ -1,4 +1,5 @@
-namespace ConsoleApp1.PracticalTask1.Common
+namespace Navigation.Common
 {
+  // Режимы работы отображения.
   public enum VisualizationMode { Mode2D, Mode3D };
 }

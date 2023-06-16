@@ -1,15 +1,18 @@
-using ConsoleApp1.PracticalTask1.Common;
+using Navigation.Common;
 using Microsoft.Extensions.Options;
 
-namespace ConsoleApp1.PracticalTask1
+namespace Navigation
 {
   /// <summary>
   /// GPS-модуль.
   /// </summary>
-  internal class GpsModule : IGpsModule
+  internal class GpsModule : IGpsModule, IDisposable
   {
     #region Константы
 
+    /// <summary>
+    /// Минимальное допустимое количество спутников для получения текущих координат.
+    /// </summary>
     private const int MinSatelliteCount = 5;
 
     #endregion
@@ -18,11 +21,14 @@ namespace ConsoleApp1.PracticalTask1
 
     private readonly ISatelliteScanner satelliteScanner;
     private readonly ICoordinateCalculator coordinateCalculator;
+    private readonly Timer timer;
 
-    private Timer timer;
-    private List<ISatellite> satellites;
+    private IReadOnlyList<ISatellite> satellites;
     private Coordinate currentCoordinate;
 
+    /// <summary>
+    /// Текущая координата.
+    /// </summary>
     public Coordinate CurrentCoordinate
     {
       get { return this.currentCoordinate; }
@@ -35,6 +41,10 @@ namespace ConsoleApp1.PracticalTask1
         CoordinateUpdated?.Invoke(new CoordinateUpdatedArgs(this.currentCoordinate));
       }
     }
+
+    /// <summary>
+    /// Флаг если возможно получить актуальную текущую кординату, необходимую для расчета пути
+    /// </summary>
     public bool IsRouteCalculable { get; protected set; }
 
     #endregion
@@ -53,13 +63,25 @@ namespace ConsoleApp1.PracticalTask1
       if (!this.IsRouteCalculable)
         return;
 
-      this.CurrentCoordinate = this.coordinateCalculator.Calculate(this.satellites);
+      this.CurrentCoordinate = this.coordinateCalculator.CalculateСurrentCoordinate(this.satellites);
+    }
+
+    /// <summary>
+    /// Освобождение ресурсов таймера.
+    /// </summary>
+    public void Dispose()
+    {
+      this.timer.Change(Timeout.Infinite, Timeout.Infinite);
+      this.timer.Dispose();
     }
 
     #endregion
 
     #region События
 
+    /// <summary>
+    /// Событие обновление текущей координаты.
+    /// </summary>
     public event Action<CoordinateUpdatedArgs>? CoordinateUpdated;
 
     #endregion
