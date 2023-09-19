@@ -24,7 +24,7 @@ public class DocumentExporter : IDocumentExporter
         {
             if (document is ICompositeDocument composite)
             {
-                this.ExportDocuments(composite.Documents, exportPath);
+                this.ExportDocuments(composite.FileDocuments, exportPath);
             }
             else
             {

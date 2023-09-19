@@ -1,23 +1,27 @@
-﻿using NETPracticalTasks.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NETPracticalTasks.ExternalLibraries;
+using NETPracticalTasks.Models;
 
 namespace NETPracticalTasks.DocumentExport
 {
     public class ArchivingDecorator : IDocumentExporter
     {
         private readonly IDocumentExporter exporter;
+        private readonly Archivator archivator;
         public void Export(IEnumerable<IDocument> documents, string exportPath)
         {
             this.exporter.Export(documents, exportPath);
             Console.WriteLine();
             Console.WriteLine($"------------------------------");
+
             foreach (var document in documents)
             {
+                var fileNames = new List<string>();
+                if (document is CompositeDocument composite)
+                    fileNames.AddRange(composite.FileDocuments.Select(f => f.Name));
+                else
+                    fileNames.Add(document.Name);
+
+                this.archivator.Zip(exportPath, document.Name, fileNames);
                 Console.WriteLine($"Файлы в папке {exportPath} упакованы в архив с именем \"{document.Name}\" .");
             }
             
@@ -26,6 +30,7 @@ namespace NETPracticalTasks.DocumentExport
         public ArchivingDecorator(IDocumentExporter exporter)
         {
             this.exporter = exporter;
+            this.archivator = new Archivator();
         }
     }
 }
