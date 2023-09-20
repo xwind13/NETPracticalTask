@@ -5,20 +5,20 @@ namespace Refactoring
         [Fact]
         public void Statement_ReturnsCorrectStatement_WhenRentalsExist()
         {
-            var movie1 = new Movie("Movie1", Movie.REGULAR);
-            var movie2 = new Movie("Movie2", Movie.NEW_RELEASE);
+            var movie1 = new Movie("Movie1", PriceCode.Regular);
+            var movie2 = new Movie("Movie2", PriceCode.NewRelease);
 
             var rental1 = new Rental(movie1, 3);
             var rental2 = new Rental(movie2, 2);
 
             var customer = new Customer("TestCustomer");
-            customer.Rentals = rental1;
-            customer.Rentals = rental2;
+            customer.AddRental(rental1);
+            customer.AddRental(rental2);
 
-            string statement = customer.Statement();
+            string statement = ReportManager.GenerateCustomerStatement(customer);
 
             string expectedStatement = "Учет аренды для TestCustomer: " +
-                "\tMovie1\t3.5\n" +
+                $"\tMovie1\t3.5\n" +
                 "\tMovie2\t6\n" +
                 "Сумма задолженности составляет 9.5\n" +
                 "Вы заработали 2 очков за активность";
@@ -30,7 +30,7 @@ namespace Refactoring
         public void Statement_ReturnsZeroAmount_WhenNoRentalsExist()
         {
             var customer = new Customer("TestCustomer");
-            string statement = customer.Statement();
+            string statement = ReportManager.GenerateCustomerStatement(customer);
 
             string expectedStatement = "Учет аренды для TestCustomer: " +
                 "Сумма задолженности составляет 0\n" +
@@ -42,21 +42,22 @@ namespace Refactoring
         [Fact]
         public void Statement_UpdatesPriceCodeCorrectly()
         {
-            var movie1 = new Movie("Movie1", Movie.REGULAR);
-            var movie2 = new Movie("Movie2", Movie.NEW_RELEASE);
+            var movie1 = new Movie("Movie1", PriceCode.Regular);
+            var movie2 = new Movie("Movie2", PriceCode.NewRelease);
 
             var rental1 = new Rental(movie1, 3);
             var rental2 = new Rental(movie2, 2);
 
             var customer = new Customer("TestCustomer");
-            customer.Rentals = rental1;
-            customer.Rentals = rental2;
+            customer.AddRental(rental1);
+            customer.AddRental(rental2);
 
-            rental1.Movie.PriceCode = Movie.CHILDRENS;
-            rental2.Movie.PriceCode = Movie.REGULAR;
+            rental1.Movie.PriceCode = PriceCode.Children;
+            rental2.Movie.PriceCode = PriceCode.Regular;
 
-            string statement = customer.Statement();
+            string statement = ReportManager.GenerateCustomerStatement(customer);
 
+            // Assert
             string expectedStatement = "Учет аренды для TestCustomer: " +
                 "\tMovie1\t1.5\n" +
                 "\tMovie2\t2\n" +

@@ -1,38 +1,22 @@
-﻿using System;
+﻿namespace Refactoring;
 
-namespace Refactoring
+/// <summary>
+/// Класс, который предоставляет данные о фильме.
+/// </summary>
+public class Movie
 {
-  /// <summary>
-  /// Класс, который предоставляет данные о фильме.
-  /// </summary>
-  public class Movie
-  {
-    public const int REGULAR = 0;
+    public PriceCode PriceCode { get; set; }
 
-    public const int NEW_RELEASE = 1;
-    
-    public const int CHILDRENS = 2;
+    public string Title { get; }
 
-    private string title = null;
-    
-    private int priceCode = 0;
-
-    public Movie(string title, int priceCode)
+    public Movie(string title, PriceCode priceCode)
     {
-      this.title = title;
-      this.priceCode = priceCode;
+        this.Title = title;
+        this.PriceCode = priceCode;
     }
+}
 
-    public int PriceCode
-    {
-      get { return this.priceCode; }
-
-      set { this.priceCode = value; }
-    }
-
-    public string Title
-    {
-      get { return this.title; }
-    }
-  }
+public enum PriceCode
+{
+    Regular = 0, NewRelease, Children
 }

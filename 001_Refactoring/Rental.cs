@@ -1,30 +1,30 @@
-﻿using System;
+﻿namespace Refactoring;
 
-namespace Refactoring
+/// <summary>
+/// Класс, представляющий данные о прокате фильма.
+/// </summary>
+public class Rental
 {
-  /// <summary>
-  /// Класс, представляющий данные о прокате фильма.
-  /// </summary>
-  public class Rental
-  {
-    private Movie movie = null;
+    public Movie Movie { get; }
 
-    private int daysRented = 0;
+    public int DaysRented { get; }
+
+    public double GetTotalPrice()
+    {
+        return RentalPricingCalculator.Calculate(this.Movie.PriceCode, this.DaysRented);
+    }
+
+    public bool IsEligibleForBonus()
+    {
+        var newReleaseRentedForOneDay = this.Movie.PriceCode == PriceCode.NewRelease && this.DaysRented <= 1;
+        var regularRentedForMoreThanWeek = this.Movie.PriceCode == PriceCode.Regular && this.DaysRented > 7;
+
+        return (newReleaseRentedForOneDay || regularRentedForMoreThanWeek);
+    }
 
     public Rental(Movie movie, int daysRented)
     {
-      this.movie = movie;
-      this.daysRented = daysRented;
+        this.Movie = movie;
+        this.DaysRented = daysRented;
     }
-
-    public Movie Movie
-    {
-      get { return this.movie; }
-    }
-
-    public int DaysRented
-    {
-      get { return this.daysRented; }
-    }
-  }
 }

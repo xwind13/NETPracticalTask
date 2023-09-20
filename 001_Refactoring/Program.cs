@@ -1,13 +1,16 @@
 ﻿using Refactoring;
+using System.Text;
 
-Customer customer = new Customer("Alex");
-Movie movie1 = new Movie("Matrix", 1);
-Movie movie2 = new Movie("Star track", 0);
-Rental rental1 = new Rental(movie1, 2);
-Rental rental2 = new Rental(movie2, 3);
+Console.OutputEncoding = Encoding.UTF8;
 
-customer.Rentals = rental1;
-customer.Rentals = rental2;
-Console.WriteLine(customer.Statement());
+Customer customer = new("Alex");
+Movie movie1 = new("Matrix", PriceCode.NewRelease);
+Movie movie2 = new("Star track", PriceCode.Regular);
+Rental rental1 = new(movie1, 2);
+Rental rental2 = new(movie2, 3);
+
+customer.AddRental(rental1);
+customer.AddRental(rental2);
+Console.WriteLine(ReportManager.GenerateCustomerStatement(customer));
 
 Console.ReadKey();
