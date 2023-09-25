@@ -1,4 +1,6 @@
 ﻿using Refactoring;
+using Refactoring.Models;
+using Refactoring.PricingStrategy;
 using System.Text;
 
 Console.OutputEncoding = Encoding.UTF8;
@@ -11,6 +13,8 @@ Rental rental2 = new(movie2, 3);
 
 customer.AddRental(rental1);
 customer.AddRental(rental2);
-Console.WriteLine(ReportManager.GenerateCustomerStatement(customer));
+
+var statementGenerator = new CustomerStatementGenerator(new PricingStrategyFactory(), new BonusEligibilityChecker());
+Console.WriteLine(statementGenerator.Generate(customer));
 
 Console.ReadKey();

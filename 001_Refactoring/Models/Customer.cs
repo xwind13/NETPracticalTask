@@ -1,4 +1,4 @@
-﻿namespace Refactoring;
+﻿namespace Refactoring.Models;
 
 /// <summary>
 /// Класс, представляющий клиента магазина.
@@ -9,15 +9,15 @@ public class Customer
 
     public string Name { get; }
 
-    public IReadOnlyList<Rental> Rentals => this.rentals;
+    public IReadOnlyList<Rental> Rentals => rentals;
 
     public void AddRental(Rental rental)
     {
-        this.rentals.Add(rental);
+        rentals.Add(rental);
     }
 
     public Customer(string name)
     {
-        this.Name = name;
+        Name = name;
     }
 }

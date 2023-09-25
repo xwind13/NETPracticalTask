@@ -1,4 +1,4 @@
-﻿namespace Refactoring;
+﻿namespace Refactoring.Models;
 
 /// <summary>
 /// Класс, который предоставляет данные о фильме.
@@ -11,8 +11,8 @@ public class Movie
 
     public Movie(string title, PriceCode priceCode)
     {
-        this.Title = title;
-        this.PriceCode = priceCode;
+        Title = title;
+        PriceCode = priceCode;
     }
 }
 

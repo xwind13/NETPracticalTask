@@ -1,3 +1,7 @@
+using Refactoring.Models;
+using Refactoring.PricingStrategy;
+using Xunit;
+
 namespace Refactoring
 {
     public class CustomerTests
@@ -15,7 +19,8 @@ namespace Refactoring
             customer.AddRental(rental1);
             customer.AddRental(rental2);
 
-            string statement = ReportManager.GenerateCustomerStatement(customer);
+            var statementGenerator = new CustomerStatementGenerator(new PricingStrategyFactory(), new BonusEligibilityChecker());
+            string statement = statementGenerator.Generate(customer);
 
             string expectedStatement = "Учет аренды для TestCustomer: " +
                 $"\tMovie1\t3.5\n" +
@@ -30,7 +35,8 @@ namespace Refactoring
         public void Statement_ReturnsZeroAmount_WhenNoRentalsExist()
         {
             var customer = new Customer("TestCustomer");
-            string statement = ReportManager.GenerateCustomerStatement(customer);
+            var statementGenerator = new CustomerStatementGenerator(new PricingStrategyFactory(), new BonusEligibilityChecker());
+            string statement = statementGenerator.Generate(customer);
 
             string expectedStatement = "Учет аренды для TestCustomer: " +
                 "Сумма задолженности составляет 0\n" +
@@ -55,7 +61,8 @@ namespace Refactoring
             rental1.Movie.PriceCode = PriceCode.Children;
             rental2.Movie.PriceCode = PriceCode.Regular;
 
-            string statement = ReportManager.GenerateCustomerStatement(customer);
+            var statementGenerator = new CustomerStatementGenerator(new PricingStrategyFactory(), new BonusEligibilityChecker());
+            string statement = statementGenerator.Generate(customer);
 
             // Assert
             string expectedStatement = "Учет аренды для TestCustomer: " +
